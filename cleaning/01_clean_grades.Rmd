@@ -5,3 +5,7 @@ date: "1/22/2019"
 output: html_document
 ---
 
+```{r}
+source("R/packages.R")
+```
+
