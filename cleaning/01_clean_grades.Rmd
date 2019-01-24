@@ -207,10 +207,306 @@ dsl_all %<>%
 # Name
 
 ```{r}
-# Fall.2013-2014,.Course.1,.Name                          
-# Fall.2013-2014,.Course.1,.Code                          
-# Fall.2013-2014,.Course.1,.Grade                         
-# Fall.2013-2014,.Course.1,.Credits.Attempted             
-# Fall.2013-2014,.Course.1,.Credits.Completed   
+dsw <- 
+  ds1 %>% 
+  select(Participant, contains("Name"))
+
+groups <-
+  dsw %>% 
+  select(-Participant) %>% 
+  names %>% 
+  noquote()
+
+dsl <-
+  dsw %>% 
+  gather(key = term, value = name, !!!groups)
+
+dsl %<>% 
+  mutate(
+    term = term %>% 
+      str_replace_all(
+        c(
+          ",.Name" = "",
+          "[.]" = " "
+        )
+      )
+  ) %>% 
+  separate(col = term, into = c("term", "course"), sep = ",")
+
+dsl %>% 
+  count(term)
+
+dsl %>% 
+  count(course)
+
+dsl %>% 
+  count(name)
 ```
+
+```{r}
+dsl %<>% 
+  mutate(
+    name_c =
+      ifelse(
+        name == ".", NA,
+        name
+      )
+  )
+
+dsl %>% 
+  count(name, name_c)
+```
+
+```{r}
+# merge with full dataset
+dsl_all %<>% 
+  left_join(dsl, by = c("Participant", "term", "course"))
+```
+
+# Code
+
+```{r}
+dsw <- 
+  ds1 %>% 
+  select(Participant, contains("Code"))
+
+groups <-
+  dsw %>% 
+  select(-Participant) %>% 
+  names %>% 
+  noquote()
+
+dsl <-
+  dsw %>% 
+  gather(key = term, value = code, !!!groups)
+
+dsl %<>% 
+  mutate(
+    term = term %>% 
+      str_replace_all(
+        c(
+          ",.Code" = "",
+          "[.]" = " "
+        )
+      )
+  ) %>% 
+  separate(col = term, into = c("term", "course"), sep = ",")
+
+dsl %>% 
+  count(term)
+
+dsl %>% 
+  count(course)
+
+dsl %>% 
+  count(code)
+```
+
+```{r}
+dsl %<>% 
+  mutate(
+    code_c =
+      ifelse(
+        code == ".", NA,
+        code
+      )
+  )
+
+dsl %>% 
+  count(code, code_c)
+```
+
+```{r}
+# merge with full dataset
+dsl_all %<>% 
+  left_join(dsl, by = c("Participant", "term", "course"))
+```
+
+# Grade
+
+```{r}
+dsw <- 
+  ds1 %>% 
+  select(Participant, contains("Grade"))
+
+groups <-
+  dsw %>% 
+  select(-Participant) %>% 
+  names %>% 
+  noquote()
+
+dsl <-
+  dsw %>% 
+  gather(key = term, value = grade, !!!groups)
+
+dsl %<>% 
+  mutate(
+    term = term %>% 
+      str_replace_all(
+        c(
+          ",.Grade" = "",
+          "[.]" = " "
+        )
+      )
+  ) %>% 
+  separate(col = term, into = c("term", "course"), sep = ",")
+
+dsl %>% 
+  count(term)
+
+dsl %>% 
+  count(course)
+
+dsl %>% 
+  count(grade)
+```
+
+```{r}
+dsl %<>% 
+  mutate(
+    grade_c =
+      ifelse(
+        grade == ".", NA,
+        grade
+      )
+  )
+
+dsl %>% 
+  count(grade, grade_c)
+```
+
+```{r}
+# merge with full dataset
+dsl_all %<>% 
+  left_join(dsl, by = c("Participant", "term", "course"))
+```
+
+# Credits Attempted
+
+```{r}
+dsw <- 
+  ds1 %>% 
+  select(Participant, contains("Credits.Attempted"))
+
+groups <-
+  dsw %>% 
+  select(-Participant) %>% 
+  names %>% 
+  noquote()
+
+dsl <-
+  dsw %>% 
+  gather(key = term, value = credits.attempted, !!!groups)
+
+dsl %<>% 
+  mutate(
+    term = term %>% 
+      str_replace_all(
+        c(
+          ",.Credits.Attempted" = "",
+          "[.]" = " "
+        )
+      )
+  ) %>% 
+  separate(col = term, into = c("term", "course"), sep = ",")
+
+dsl %>% 
+  count(term)
+
+dsl %>% 
+  count(course)
+
+dsl %>% 
+  count(credits.attempted)
+```
+
+```{r}
+dsl %<>% 
+  mutate(
+    credits.attempted_c =
+      ifelse(
+        credits.attempted == ".", NA,
+        credits.attempted
+      )
+  )
+
+dsl %>% 
+  count(credits.attempted, credits.attempted_c)
+```
+
+```{r}
+# merge with full dataset
+dsl_all %<>% 
+  left_join(dsl, by = c("Participant", "term", "course"))
+```
+
+# Credits Completed
+
+```{r}
+dsw <- 
+  ds1 %>% 
+  select(Participant, contains("Credits.Completed"))
+
+groups <-
+  dsw %>% 
+  select(-Participant) %>% 
+  names %>% 
+  noquote()
+
+dsl <-
+  dsw %>% 
+  gather(key = term, value = credits.completed, !!!groups)
+
+dsl %<>% 
+  mutate(
+    term = term %>% 
+      str_replace_all(
+        c(
+          ",.Credits.Completed" = "",
+          "[.]" = " "
+        )
+      )
+  ) %>% 
+  separate(col = term, into = c("term", "course"), sep = ",")
+
+dsl %>% 
+  count(term)
+
+dsl %>% 
+  count(course)
+
+dsl %>% 
+  count(credits.completed)
+```
+
+```{r}
+dsl %<>% 
+  mutate(
+    credits.completed_c =
+      ifelse(
+        credits.completed == ".", NA,
+        credits.completed
+      )
+  )
+
+dsl %>% 
+  count(credits.completed, credits.completed_c)
+```
+
+```{r}
+# merge with full dataset
+dsl_all %<>% 
+  left_join(dsl, by = c("Participant", "term", "course"))
+```
+
+# Export cleaned grades dataset in long format
+
+```{r}
+dsl_all %>% 
+  write_csv("../../LTB School Data/Grade data for Lifting the Bar (FINAL) Long Format.csv")
+
+dsl_all %>% 
+  write_rds("../../LTB School Data/Grade data for Lifting the Bar (FINAL) Long Format.rds")
+```
+
 
