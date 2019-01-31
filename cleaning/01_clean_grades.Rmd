@@ -10,10 +10,8 @@ source("../R/packages.R")
 ```
 
 ```{r}
-ds <- read.xlsx("../../LTB School Data/Grade data for Lifting the Bar (FINAL).xlsx", sheet = 1, detectDates = TRUE, startRow = 1, colNames = TRUE)
+ds <- read.xlsx("../../LTB Data/LTB School Data/Grade data for Lifting the Bar (FINAL).xlsx", sheet = 1, detectDates = TRUE, startRow = 1, colNames = TRUE)
 ```
-
-
 
 ```{r}
 ds1 <- select(ds, -Notes)
