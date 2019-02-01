@@ -501,10 +501,10 @@ dsl_all %<>%
 
 ```{r}
 dsl_all %>% 
-  write_csv("../../LTB School Data/Grade data for Lifting the Bar (FINAL) Long Format.csv")
+  write_csv("../../LTB Data/LTB School Data/Grade data for Lifting the Bar (FINAL) Long Format.csv")
 
 dsl_all %>% 
-  write_rds("../../LTB School Data/Grade data for Lifting the Bar (FINAL) Long Format.rds")
+  write_rds("../../LTB Data/LTB School Data/Grade data for Lifting the Bar (FINAL) Long Format.rds")
 ```
 
 
