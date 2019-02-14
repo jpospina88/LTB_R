@@ -18,7 +18,8 @@ ds1 <- select(ds, -Notes)
 ```
 
 ```{r eval=FALSE, include=FALSE}
-ds1 %>% 
+ds1 %>%
+  select(starts_with("Fall.2013-2014")) %>% 
   names %>% 
   noquote
 ```
@@ -497,14 +498,41 @@ dsl_all %<>%
   left_join(dsl, by = c("Participant", "term", "course"))
 ```
 
-# Export cleaned grades dataset in long format
-
+# Term
 ```{r}
-dsl_all %>% 
-  write_csv("../../LTB Data/LTB School Data/Grade data for Lifting the Bar (FINAL) Long Format.csv")
+terms <-
+  dsl_all %>% 
+  count(term) %>% 
+  mutate(
+    term1 = term
+  ) %>% 
+  separate(term1, c("period", "year"), sep = " ") %>% 
+  mutate(
+    period_first = ifelse(
+      period == "Fall", 1,
+      ifelse(
+        period == "Winter", 2,
+        ifelse(
+          period == "Spring", 3, 4
+        )
+      )
+    )
+  ) %>% 
+  arrange(year, period_first) %>% 
+  select(term) %>% 
+  as_vector
+
+dsl_all$term_c <- ordered(dsl_all$term, levels = terms)
+
+# dsl_all %>% 
+#   mutate(
+#     term_c = term,
+#     term_c = ordered(term, levels = terms)
+#   ) 
 
 dsl_all %>% 
-  write_rds("../../LTB Data/LTB School Data/Grade data for Lifting the Bar (FINAL) Long Format.rds")
+  count(
+    term_c, term
+  )
 ```
-
 
