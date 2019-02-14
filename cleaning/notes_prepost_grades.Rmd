@@ -1,0 +1,56 @@
+---
+title: "Notes of participants"
+author: "Juan Ospina"
+date: "2/14/2019"
+output: html_document
+---
+
+```{r}
+# Notes about reviewing the pre- post-intervention measure. If good, this means that the participant has pre- and post-intervention data
+notes <-
+  tribble(
+    ~Participant, ~Note,
+    "P02",        "No post-intv data",
+    "P03",        "Good",
+    "P04",        "Good",
+    "P05",        "Good",
+    "P08",        "Good",
+    "P09",        "Good",
+    "P10",        "Good",
+    "P14",        "No post-intv data because threshold is set to 30 days",
+    "P16",        "No post-intv data",
+    "P17",        "Good",
+    "P18",        "Good",
+    "P20",        "Good",
+    "P21",        "",
+    "P22",        "",
+    "P23",        "",
+    "P27",        "",
+    "P28",        "",
+    "P29",        "",
+    "P30",        "",
+    "P31",        "",
+    "P32",        "",
+    "P33",        "",
+    "P34",        "",
+    "P36",        "",
+    "P38",        "",
+    "P39",        "",
+    "P40",        "",
+    "P44",        "",
+    "P46",        "",
+    "P50",        "",
+    "P54",        "",
+    "P56",        "",
+    "P58",        "",
+    "P59",        "",
+    "P60",        "",
+    "P62",        "",
+    "P63",        "",
+    "S01",        "",
+    "S02",        "",
+    "S03",        "",
+    "S07",        ""
+  )
+```
+
