@@ -1,0 +1,19 @@
+---
+title: "Run All Cleaning Markdowns"
+author: "Juan Ospina"
+date: "2/12/2019"
+output: html_document
+---
+
+```{r}
+rmarkdown::render(
+  "01_clean_grades.Rmd", 
+  "html_document"
+  )
+
+rmarkdown::render(
+  "02_clean_prepost_grades.Rmd", 
+  "html_document"
+  )
+```
+
