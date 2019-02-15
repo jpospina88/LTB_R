@@ -278,7 +278,7 @@ notes <-
     "P32",        "No pre-intv data",
     "P33",        "No intervention at all",
     "P34",        "Good",
-    "P36",        "No post-intv data - the date of the intervention was 102 days (over 30 days) past"
+    "P36",        "No post-intv data - the date of the intervention was 102 days (over 30 days) past",
     "P38",        "Good, but no intervention until 183 after fall quarter start, 29 days after spring quarter start",
     "P39",        "Good",
     "P40",        "No post-intv data - the date of the intervention was 115 days (over 30 days) past",
