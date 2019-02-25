@@ -15,5 +15,15 @@ rmarkdown::render(
   "02_clean_prepost_grades.Rmd", 
   "html_document"
   )
+
+rmarkdown::render(
+  "10_clean_attendance.Rmd", 
+  "html_document"
+  )
+
+rmarkdown::render(
+  "020_understand_data.Rmd", 
+  "html_document"
+  )
 ```
 
