@@ -2,8 +2,21 @@
 title: "10_clean_attendance"
 author: "Juan Ospina"
 date: "2/13/2019"
-output: html_document
+output: 
+  html_document:
+    toc: TRUE
+    toc_float: TRUE
+    number_sections: TRUE
 ---
+
+```{r global options, echo=FALSE}
+knitr::opts_chunk$set(
+  # fig.path = 'figs/', fig.show = 'asis', 
+  dpi = 75, 
+  # include = FALSE, 
+  echo = FALSE, # run the code, show me only the graphs
+  warning = FALSE, message = FALSE, cache = FALSE)
+```
 
 ```{r}
 ds_a <- read.xlsx("../../LTB Data/LTB School Data/Attendance for Lifting the Bar (FINAL).xlsx", sheet = 1, detectDates = TRUE, startRow = 1, colNames = TRUE)
@@ -53,5 +66,69 @@ date_acad_year %>%
   write_rds("../../LTB Data/LTB School Data/dates_acad_year.rds")
 ```
 
+# Understand codes of variables
 
+```{r}
+# ds_a %>% names %>% noquote()
+
+ds_a %>% 
+  count(`Y/-.(Present)`) %>% 
+  kable_format()
+
+ds_a %>% 
+  count(`A.(Absent,.Unverified)`) %>% 
+  kable_format()
+
+ds_a %>% 
+  count(`T.(Tardy)`) %>% 
+  kable_format()
+
+ds_a %>% 
+  count(`X.(Excused.Absence)`) %>% 
+  kable_format()
+
+ds_a %>% 
+  count(`S.(Suspended)`) %>% 
+  kable_format()
+
+ds_a %>% 
+  count(`I.(Illness)`) %>% 
+  kable_format()
+
+ds_a %>% 
+  count(`P.(Personal)`) %>% 
+  kable_format()
+
+ds_a %>% 
+  count(`V.(School.activity)`) %>% 
+  kable_format()
+
+ds_a %>% 
+  count(`M.(Tardy.30+.Minutes)`) %>% 
+  kable_format()
+
+ds_a %>% 
+  count(`O.(Out.on.Home.study)`) %>% 
+  kable_format()
+
+ds_a %>% 
+  count(`U.(Unexcused.Absence)`) %>% 
+  kable_format()
+
+ds_a %>% 
+  count(`Z.(Administrative.suspension)`) %>% 
+  kable_format()
+
+ds_a %>% 
+  count(`NE.(Not.Enrolled)`) %>% 
+  kable_format()
+
+ds_a %>% 
+  count(`H.(In-school.suspension)`) %>% 
+  kable_format()
+
+ds_a %>% 
+  count(`J.(Juvenile.detention)`) %>% 
+  kable_format()
+```
 
