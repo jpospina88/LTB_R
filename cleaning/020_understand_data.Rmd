@@ -1,0 +1,78 @@
+---
+title: "Understand dataset"
+author: "Juan Ospina"
+date: "2/20/2019"
+output: 
+  html_document:
+    toc: TRUE
+    toc_float: TRUE
+    number_sections: TRUE
+---
+
+```{r global options, echo=FALSE}
+knitr::opts_chunk$set(
+  # fig.path = 'figs/', fig.show = 'asis', 
+  dpi = 75, 
+  # include = FALSE, 
+  echo = FALSE, # run the code, show me only the graphs
+  warning = FALSE, message = FALSE, cache = FALSE)
+```
+
+# Note
+
+To run this markdown, you need to run the "clean_all.Rmd" markdown.
+
+```{r}
+ds_intv %>% 
+  count(cond)
+```
+
+```{r}
+ds_intv2 <-
+  read_csv("../../LTB Data/LTB Intervention Data/Participants Fall '17 - Spring '18 (de-identified).csv")
+```
+
+```{r}
+ds_intv2 %<>% 
+  mutate(
+    cond = `Condition (1 = Con, 2 = Inter, 3 = Letter)`,
+    cond = as.factor(cond),
+    cond = factor(
+      cond,
+      levels = c(1, 
+                 2,
+                 3),
+      labels = c("control", 
+                 "intv",
+                 "letter")
+    )
+  )
+
+ds_intv2 %<>%
+  rename(
+    Participant = `Participant #`
+  )
+
+ds_intv2 %<>% 
+  mutate(
+    date_session1 = mdy(`Session 1`),
+    date_session2 = mdy(`Session 2`)
+  )
+```
+
+```{r}
+ds_intv_all <- 
+  ds_intv2 %>% 
+  select(
+    Participant,
+    cond,
+    date_session1,
+    date_session2
+  ) %>% 
+  bind_rows(ds_intv)
+
+ds_intv_all %>% 
+  filter(!is.na(cond)) %>% 
+  demographics_pct(quos(cond))
+```
+
