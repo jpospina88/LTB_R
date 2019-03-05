@@ -8,18 +8,18 @@ output: html_document
 ```{r}
 # Grades markdowns
 rmarkdown::render(
-  "01_clean_grades.Rmd", 
+  "001_clean_grades.Rmd", 
   "html_document"
   )
 
 rmarkdown::render(
-  "02_clean_prepost_grades.Rmd", 
+  "002_clean_prepost_grades.Rmd", 
   "html_document"
   )
 
 # Attendance markdowns
 rmarkdown::render(
-  "10_clean_attendance.Rmd", 
+  "010_clean_attendance.Rmd", 
   "html_document"
   )
 
