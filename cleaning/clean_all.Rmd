@@ -6,6 +6,13 @@ output: html_document
 ---
 
 ```{r}
+knit_markdown <- function(name) {
+  rmarkdown::render(
+  name, 
+  "html_document"
+  )
+}
+
 # Grades markdowns
 rmarkdown::render(
   "001_clean_grades.Rmd", 
@@ -29,5 +36,8 @@ rmarkdown::render(
   )
 
 # Intervention markdowns
+knit_markdown("030_merge_intv_data.Rmd")
+knit_markdown("031_review_participants.Rmd")
+
 ```
 
