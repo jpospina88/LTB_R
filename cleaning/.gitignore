@@ -8,3 +8,6 @@ how to pre_post data.Rmd
 001_clean_grades.html
 002_clean_prepost_grades.html
 010_clean_attendance.html
+030_merge_intv_data.html
+031_review_participants.html
+032_composites.html
