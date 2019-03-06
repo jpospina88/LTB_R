@@ -1,0 +1,60 @@
+---
+title: "Review and Filter Participants"
+author: "Juan Ospina"
+date: "3/5/2019"
+output: 
+  html_document:
+    toc: TRUE
+    toc_float: TRUE
+    number_sections: TRUE
+---
+
+```{r global options, echo=FALSE}
+source("../R/markdown_global_options.R")
+```
+
+```{r}
+source("../R/packages.R")
+```
+
+```{r}
+ds_intv_final %<>% 
+  rename(
+    `Condition` = `Condition (1 = Con, 2 = Inter, 3 = Letter)`
+  )
+
+vars <-
+  quos(
+    Participant
+    # Condition
+  )
+
+dplyr::setdiff(
+  ds_intv_final %>% 
+    select(!!!vars) %>% 
+    arrange(Participant),
+  ds_ltb %>% 
+    select(!!!vars) %>% 
+    arrange(Participant)
+)
+
+ds_intv_final %>% 
+  count(Condition)
+
+ds_ltb %>% 
+  count(Condition)
+```
+
+```{r}
+ltb <-
+  ds_ltb %>% 
+  filter(Condition != 0)
+
+ltb %>% 
+  count(Condition)
+
+ltb %>% 
+  select(Participant) %>% 
+  arrange(Participant)
+```
+
