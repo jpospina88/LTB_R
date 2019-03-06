@@ -76,3 +76,11 @@ ds_intv_all %>%
   demographics_pct(quos(cond))
 ```
 
+```{r}
+ds_intv_final <- 
+  bind_rows(ds_intv1, ds_intv2)
+
+ds_intv_final %>% 
+  write_csv("../../LTB Data/LTB Intervention Data/Participants Fall '16 - Spring '17 & Fall '17 - Spring '18.csv")
+```
+
