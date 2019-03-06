@@ -9,3 +9,86 @@ output:
     number_sections: TRUE
 ---
 
+```{r global options, echo=FALSE}
+source("../R/markdown_global_options.R")
+```
+
+```{r}
+source("../R/packages.R")
+```
+
+```{r}
+ds_ltb_16 <- read.xlsx("../../LTB Data/LTB Intervention Data/Fall '16-Spring '17 Intervention Data (without first row).xlsx", sheet = 1, detectDates = TRUE, startRow = 1, colNames = TRUE)
+
+ds_ltb_17 <- read.xlsx("../../LTB Data/LTB Intervention Data/Fall '17-Spring '18 Intervention Data (without first row).xlsx", sheet = 1, detectDates = TRUE, startRow = 1, colNames = TRUE)
+```
+
+
+```{r}
+# Omit columns that don't match
+ds_ltb_16 %<>% 
+  select(-X2)
+
+ds_ltb_17 %<>% 
+  select(-Grade)
+```
+
+```{r}
+# not useful
+# setdiff(ds_ltb_16, ds_ltb_17)
+
+# review datasets and names of variables
+# ds_ltb_16 %>% 
+#   head
+
+# ds_ltb_16 %>% 
+#   names %>% 
+#   noquote()
+```
+
+```{r}
+# review datasets and names of variables
+# ds_ltb_17 %>% 
+#   head
+
+# ds_ltb_17 %>% 
+#   names %>% 
+#   noquote()
+```
+
+```{r}
+# review format of variables
+ds_ltb_16 %>% 
+  select(Participant, starts_with("Condition"))
+
+ds_ltb_17 %>% 
+  select(Participant, starts_with("Condition"))
+
+# change format of variables before merging
+ds_ltb <-
+  bind_rows(
+    ds_ltb_16 %>% 
+      mutate(
+        `Saying-is-believing.questions` = as.character(`Saying-is-believing.questions`),
+        s1.safe_out = as.numeric(s1.safe_out)
+        ) %>% 
+      rename(
+        `Condition` = `Condition.(1.=.Con,.2.=.Inter,.3.=.Letter,.0.=.No.intervention.received)`
+      ), 
+    ds_ltb_17 %>% 
+      rename(
+        `Condition` = `Condition.(1.=.Con,.2.=.Inter,.3.=.Letter)`
+      ))
+```
+
+```{r}
+# ds_ltb %>% 
+#   names %>% 
+#   noquote()
+```
+
+```{r}
+ds_ltb %>% 
+  write_csv("../../LTB Data/LTB Intervention Data/Fall '16-Spring '17 & Fall '17-Spring '18 Intervention Data.csv")
+```
+
