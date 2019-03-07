@@ -38,6 +38,6 @@ rmarkdown::render(
 # Intervention markdowns
 knit_markdown("030_merge_intv_data.Rmd")
 knit_markdown("031_review_participants.Rmd")
-knit_markdown("032_composites.Rmd")
+knit_markdown("032_composites.Rmd") # knit this markdown independently to get all the output from the scale-reliability and factor analyses
 ```
 
