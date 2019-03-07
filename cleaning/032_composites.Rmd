@@ -28,6 +28,9 @@ source("../analyzing/list_variables.R")
 ```{r}
 ltb <-
   read_rds("../../LTB Data/LTB Intervention Data/Fall '16-Spring '17 & Fall '17-Spring '18 Intervention Data (Filtered).rds")
+
+# ltb <-
+#   read_rds("../../LTB Data/LTB Intervention Data/Fall '16-Spring '17 & Fall '17-Spring '18 Intervention Data (Filtered).rds")
 ```
 
 # Pre-Measures
@@ -282,6 +285,7 @@ ltb$s1.safety_c4 <-
             Zitems = FALSE, rel = TRUE, nomiss = .33)
 ```
 
+# Follow-Up
 ## Belonging at School
 
 ```{r}
@@ -380,8 +384,6 @@ ltb %<>%
 ltb %>% 
   count(Condition, cond)
 ```
-
-
 
 ```{r export cleaned dataset}
 ltb %>% 
