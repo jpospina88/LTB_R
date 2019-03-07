@@ -1,0 +1,281 @@
+---
+title: "Linear Regressions"
+author: "Juan Ospina"
+date: "3/6/2019"
+output: 
+  html_document:
+    toc: TRUE
+    toc_float: TRUE
+    number_sections: TRUE
+---
+
+```{r global options, echo=FALSE}
+source("../R/markdown_global_options.R")
+```
+
+```{r}
+source("../R/packages.R")
+```
+
+```{r}
+source("../R/custom_functions.R")
+```
+
+```{r}
+ltb <-
+  read_rds("../../LTB Data/LTB Intervention Data/Fall '16-Spring '17 & Fall '17-Spring '18 Intervention Data (Filtered & cleaned).rds")
+```
+
+```{r}
+source("list_variables.R")
+```
+
+# Descriptive Statistics
+
+## Overall
+```{r}
+ltb %>% 
+  select(!!!vars_cont) %>% 
+  describe_vars
+```
+
+## By Treatment
+
+```{r}
+groups <- list(ltb$cond)
+
+ltb %>% 
+  select(!!!vars_cont) %>% 
+  describeBy(groups, mat = TRUE, digits = 2) %>% 
+  kable_format
+```
+
+# Raincloud plots
+
+## By Treatment and Disadvantaged Status
+
+```{r}
+theme <- 
+  theme(
+    strip.text = black1, 
+    strip.background = black2, 
+    axis.text.y = # change size of y-axis text
+      element_text(
+        size = 20, 
+        family = "Helvetica"),
+    axis.text.x = # change size of x-axis and y-axis text
+      element_text(
+        size = 
+          20
+          # 16
+        , 
+        family = "Helvetica"),
+    axis.title = element_text(size = 22, family = "Helvetica"), 
+    strip.text.x = element_text(size = 22, colour = "white", family = "Helvetica"),
+    plot.title = element_text(size = 22, hjust = 0.5),
+    plot.subtitle = element_text(size = 16, hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank(),
+    axis.title.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    legend.position = 'top',
+    legend.key = element_rect(size = 10),
+    legend.key.size = unit(1, 'lines')
+  )
+
+plot_raincloud_map_group <- function(ftr, var, y_lab, scales, limit, subheader) ltb %>% 
+  ggplot(aes(y = get(var), x = get(ftr), fill = get(ftr))) +
+  raincloud_violin +
+  geom_point(aes(y = get(var), color = get(ftr)), 
+             position = position_jitter(width = .15), size = .5, alpha = 0.8) +
+  stat_summary_se + raincloud_boxplot + raincloud_guides + 
+  raincloud_theme_light + raincloud_theme +
+  # color_treat + 
+  labels_treat + 
+  theme1 + theme + 
+  # ylab(y_lab) + xlab("") + 
+  coord_cartesian(ylim = limit) +
+  scale_y_continuous(breaks = scales) +
+  ylab("") + ggtitle(y_lab) + xlab("") + theme + guides_no +
+  labs(subtitle = subheader)
+
+plots <- mapply(plot_raincloud_map_group, # function
+       tribble_cont[,"cond"] %>% t, tribble_cont[,"dv"] %>% t, # arguments
+       tribble_cont[,"dv_name"] %>% t, tribble_cont[,"scale"] %>% t, 
+       tribble_cont[,"limit"] %>% t, tribble_cont[,"subheader"] %>% t, 
+       SIMPLIFY = FALSE
+       )
+
+plots
+# plots[[1]]
+```
+
+# Models
+
+## Example
+```{r}
+lm(s0.grit_c5 ~ cond,data = ltb) %>% 
+  summary
+```
+
+```{r}
+vars_ivs <- 
+  quos(
+    Participant, # IDs
+    cond # condition
+  )
+
+d.gather <- ltb %>%
+  select(!!!vars_ivs, !!!vars_cont) %>% 
+  gather(key = dv_name, value = dv_value, !!!vars_cont)
+
+d.nest <- 
+  d.gather %>% 
+  group_by(dv_name) %>% 
+  nest()
+
+lm_model <- function(data){
+  lm(dv_value ~ cond, data = data)
+}
+
+d.nest %<>% mutate(lm_model = map(.x = data, .f = lm_model))
+
+d.nest %<>%
+  mutate(
+    glance = lm_model %>% map(broom::glance),
+    rsq = glance %>% map_dbl("r.squared"),
+    tidy = lm_model %>% map(broom::tidy),
+    augment = lm_model %>% map(broom::augment)
+  )
+
+d.nest %<>% 
+  mutate(
+    emmean_treat = pmap( # treatment effects by disadvantaged status
+      .l = list(
+        object = lm_model, 
+        specs = "cond"
+      ),
+      .f = emmeans
+    ),
+    emmean_treat_df = map(
+      .x = emmean_treat, 
+      .f = data.frame),
+    emmean_treat_sc = map(
+      .x = emmean_treat,
+      .f = pairs,
+      reverse = TRUE,
+      adjust = "none"
+    ),
+    emmean_treat_sc_df = map(
+      .x = emmean_treat_sc, 
+      .f = data.frame)
+  ) 
+```
+
+## Glance Overall Fit of Models
+
+## By Treatment
+
+```{r}
+dvs_col <- 
+  d.gather %>% 
+  select(dv_name) %>% 
+  unique
+
+dvs_col %>% 
+  bind_cols(d.nest$glance %>% bind_rows) %>% 
+  round_table(quos(dv_name), 2) %>% 
+  kable_format
+```
+
+## Main Effects and Interactions
+
+### By Treatment 
+```{r}
+# d.nest$tidy[[1]]
+
+dvs_col_rep <- dvs_col$dv_name %>% 
+  rep(each = 
+        3 # change this number depending on the number of rows of your tidy datasets
+      ) %>% 
+  as.tibble %>% 
+  rename(dv_name = value)
+
+dvs_col_rep %>% 
+  bind_cols(d.nest$tidy %>% bind_rows) %>% 
+  round_table(quos(dv_name, term), 2) %>% 
+  kable_format
+```
+
+## Simple Effects
+
+### Treatment Effects
+
+```{r}
+# d.nest$emmean_treat_sc_df[[1]]
+
+dvs_col_rep <- dvs_col$dv_name %>% 
+  rep(
+    each = 
+      3 # change this number depending on the number of rows of your tidy datasets
+    ) %>% 
+  as.tibble %>% 
+  rename(dv_name = value)
+
+dvs_col_rep %>% 
+  bind_cols(d.nest$emmean_treat_sc_df %>% bind_rows) %>% 
+  round_table(
+    quos(
+      dv_name, 
+      contrast
+    ), 2) %>% 
+  filter(contrast != "letter - intv") %>% 
+  kable_format
+```
+
+# Bar Plots
+
+## By Treatment
+
+```{r}
+d.unnest_treat <-
+  d.nest %>% 
+  unnest(emmean_treat_df) %>% 
+  spread(key = dv_name, value = emmean)
+```
+
+```{r}
+guides_no <- guides(fill = FALSE, color = FALSE)
+
+plot_bar_x_y_group <- function(ftr, var, y_lab, scales, limit, position, decimal, subheader) d.unnest_treat %>% 
+  filter(!is.na(get(var))) %>% 
+  ggplot(aes(x = get(ftr), y = get(var), color = get(ftr), group = get(ftr))) + # Remember to add get()
+  # geom_segment(aes(x = get(ftr), xend = get(ftr), y = -10, yend = get(var)), size = 42, color = "black") +
+  geom_segment(aes(x = get(ftr), xend = get(ftr), y = -10, yend = get(var)), 
+               size = 
+                 # 41
+                 45
+               ) +
+  geom_errorbar(aes(ymin = get(var) - SE, ymax = get(var) + SE), width = .4, position = pd2, color = "black") +
+  theme1 +
+  geom_text(aes(label = format(get(var), digits = decimal), y = position), size = 8, color = "black") +
+  coord_cartesian(ylim = limit) +
+  scale_y_continuous(breaks = scales) +
+  # facet_grid(, vars(adv_hispanic_sc), labeller = as_labeller(hispanic_adv_names)) +
+  ylab("") + ggtitle(y_lab) + xlab("") + theme + guides_no +
+  labs(subtitle = subheader) + 
+  labels_treat
+  # color_treat + 
+  # legend_treat
+
+plots <- mapply(plot_bar_x_y_group, # function
+       tribble_cont[,"cond"] %>% t, tribble_cont[,"dv"] %>% t, # arguments
+       tribble_cont[,"dv_name"] %>% t, tribble_cont[,"scale"] %>% t, 
+       tribble_cont[,"limit"] %>% t, tribble_cont[,"position"] %>% t, 
+       tribble_cont[,"decimal"] %>% t, tribble_cont[,"subheader"] %>% t,
+       SIMPLIFY = F)
+
+plots
+# plots[[1]]
+```
+
