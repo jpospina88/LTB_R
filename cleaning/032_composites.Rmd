@@ -18,10 +18,376 @@ source("../R/packages.R")
 ```
 
 ```{r}
-ltb
+source("../R/custom_functions.R")
 ```
 
 ```{r}
+source("../analyzing/list_variables.R")
+```
 
+```{r}
+ltb <-
+  read_rds("../../LTB Data/LTB Intervention Data/Fall '16-Spring '17 & Fall '17-Spring '18 Intervention Data (Filtered).rds")
+```
+
+# Pre-Measures
+
+## Grit
+
+```{r}
+# Get variables names
+get_names(ltb, "s0.grit")
+
+# Subscales of composite
+vars <-
+  c(
+    "s0.grit_finish",
+    "s0.grit_project",
+    "s0.grit_try",
+    "s0.grit_goals",
+    "s0.grit_quitting" 
+  )
+
+# Scale reliability
+alphatize_2(ltb, quos(vars))
+
+# Fitting 1-5 Factor Model
+# extract a single factor with no rotation (since only one factor) 
+# with maximum likelihood estimation
+singfac <- fa(select(ltb, !!!quos(vars)), 
+              nfactors = 1, rotate = "none", SMC = TRUE, 
+              fm = "ml", alpha = .05, n.iter = 1000)
+singfac
+
+# Second way to conduct a factor analysis
+factor_analysis(ltb, quos(vars), 1)
+
+# Create composite
+ltb$s0.grit_c5 <- 
+  composite(select(ltb, !!!quos(vars)), 
+            Zitems = FALSE, rel = TRUE, nomiss = .33)
+```
+
+## Implicit Theories of Personality
+
+Note: Higher values mean more fixed view of personalities.
+
+```{r}
+# Get variables names
+get_names(ltb, "s0.personality")
+
+# Subscales of composite
+vars <-
+  c(
+    "s0.personality_certain",
+    "s0.personality_olddog",
+    "s0.personality_change"
+  )
+
+# Scale reliability
+alphatize_2(ltb, quos(vars))
+
+# Fitting 1-5 Factor Model
+# extract a single factor with no rotation (since only one factor) 
+# with maximum likelihood estimation
+singfac <- fa(select(ltb, !!!quos(vars)), 
+              nfactors = 1, rotate = "none", SMC = TRUE, 
+              fm = "ml", alpha = .05, n.iter = 1000)
+singfac
+
+# Second way to conduct a factor analysis
+factor_analysis(ltb, quos(vars), 1)
+
+# Create composite
+ltb$s0.personality_c5 <- 
+  composite(select(ltb, !!!quos(vars)), 
+            Zitems = FALSE, rel = TRUE, nomiss = .33)
+```
+
+## Succeed at School
+
+```{r}
+# Get variables names
+get_names(ltb, "s0.school")
+
+# Subscales of composite
+vars <-
+  c(
+    "s0.school_imp",
+    "s0.school_success"
+  )
+
+# Scale reliability
+alphatize_2(ltb, quos(vars))
+
+ltb %>% 
+  corr_table(quos(vars))
+
+
+# Create composite
+ltb$s0.school_c2 <- 
+  composite(select(ltb, !!!quos(vars)), 
+            Zitems = FALSE, rel = TRUE, nomiss = .33)
+```
+
+## Police Concerns & Expectations Because of J.D.
+
+```{r}
+# Get variables names
+get_names(ltb, "s0.fight")
+
+# Subscales of composite
+vars <-
+  c(
+    "s0.fight_conc",
+    "s0.fight_expect"
+  )
+
+# Scale reliability
+alphatize_2(ltb, quos(vars))
+
+ltb %>% 
+  corr_table(quos(vars))
+
+
+# Create composite
+ltb$s0.police_c2 <- 
+  composite(select(ltb, !!!quos(vars)), 
+            Zitems = FALSE, rel = TRUE, nomiss = .33)
+```
+
+# Post-Intervention Outcomes
+
+## Belonging at School
+
+Note: The cleaned dataset already had the "s1.belong_outsider" item reverse-coded. This is why we don't need to do anything in the code below to account for this.
+
+```{r}
+# Get variables names
+get_names(ltb, "s1.belong")
+
+# Subscales of composite
+vars <-
+  c(
+    "s1.belong_belong",
+    "s1.belong_fit",
+    "s1.belong_outsider",
+    "s1.belong_comfort"
+  )
+
+# Scale reliability
+alphatize_2(ltb, quos(vars))
+
+# Fitting 1-5 Factor Model
+# extract a single factor with no rotation (since only one factor) 
+# with maximum likelihood estimation
+singfac <- fa(select(ltb, !!!quos(vars)), 
+              nfactors = 1, rotate = "none", SMC = TRUE, 
+              fm = "ml", alpha = .05, n.iter = 1000)
+singfac
+
+# Second way to conduct a factor analysis
+factor_analysis(ltb, quos(vars), 1)
+
+# Create composite
+ltb$s1.belong_c4 <- 
+  composite(select(ltb, !!!quos(vars)), 
+            Zitems = FALSE, rel = TRUE, nomiss = .33)
+```
+
+## Class Anxiety
+
+```{r}
+# Get variables names
+get_names(ltb, "s1.anx")
+
+# Subscales of composite
+vars <-
+  c(
+    "s1.anx_teacher",
+    "s1.anx_question"
+  )
+
+# Scale reliability
+alphatize_2(ltb, quos(vars))
+
+ltb %>% 
+  corr_table(quos(vars))
+
+
+# Create composite
+ltb$s0.classanx_c2 <- 
+  composite(select(ltb, !!!quos(vars)), 
+            Zitems = FALSE, rel = TRUE, nomiss = .33)
+```
+
+## Fairness at School
+
+```{r}
+# Get variables names
+get_names(ltb, "s1.fair")
+
+# Subscales of composite
+vars <-
+  c(
+    "s1.fair_eval",
+    "s1.fair_disc"
+  )
+
+# Scale reliability
+alphatize_2(ltb, quos(vars))
+
+ltb %>% 
+  corr_table(quos(vars))
+
+
+# Create composite
+ltb$s1.schoolfair_c2 <- 
+  composite(select(ltb, !!!quos(vars)), 
+            Zitems = FALSE, rel = TRUE, nomiss = .33)
+```
+
+## Feeling of Safety
+
+```{r}
+# Get variables names
+get_names(ltb, "s1.safe")
+
+# Subscales of composite
+vars <-
+  c(
+    "s1.safe_out",
+    "s1.safe_travel",
+    "s1.safe_hall",
+    "s1.safe_class" 
+  )
+
+# Scale reliability
+alphatize_2(ltb, quos(vars))
+
+# Fitting 1-5 Factor Model
+# extract a single factor with no rotation (since only one factor) 
+# with maximum likelihood estimation
+# singfac <- fa(select(ltb, !!!quos(vars)), 
+#               nfactors = 1, rotate = "none", SMC = TRUE, 
+#               fm = "ml", alpha = .05, n.iter = 500)
+# singfac
+
+# Second way to conduct a factor analysis
+factor_analysis(ltb, quos(vars), 1)
+
+# Create composite
+ltb$s1.safety_c4 <- 
+  composite(select(ltb, !!!quos(vars)), 
+            Zitems = FALSE, rel = TRUE, nomiss = .33)
+```
+
+## Belonging at School
+
+```{r}
+# Get variables names
+get_names(ltb, "s2.belong")
+
+# Subscales of composite
+vars <-
+  c(
+    "s2.belong_belong",
+    "s2.belong_fit",
+    "s2.belong_outsider",
+    "s2.belong_comfort"
+  )
+
+# Scale reliability
+alphatize_2(ltb, quos(vars))
+
+# Fitting 1-5 Factor Model
+# extract a single factor with no rotation (since only one factor) 
+# with maximum likelihood estimation
+singfac <- fa(select(ltb, !!!quos(vars)), 
+              nfactors = 1, rotate = "none", SMC = TRUE, 
+              fm = "ml", alpha = .05, n.iter = 1000)
+singfac
+
+# Second way to conduct a factor analysis
+factor_analysis(ltb, quos(vars), 1)
+
+# Create composite
+ltb$s2.belong_c4 <- 
+  composite(select(ltb, !!!quos(vars)), 
+            Zitems = FALSE, rel = TRUE, nomiss = .33)
+
+ltb %<>%
+  mutate(
+    s2.belong_diff = s2.belong_c4 - s1.belong_c4
+    # s2.belong_c4_z = base::scale(s2.belong_c4),
+    # s1.belong_c4_z = base::scale(s1.belong_c4),
+    # s2.belong_diff_z = s2.belong_c4_z - s1.belong_c4_z
+  )
+
+# vars <-
+#   c(
+#     "s2.belong_c4",
+#     "s1.belong_c4"
+#   )
+
+# Create composite
+# ltb$s2.belong_c4_z <- 
+#   composite(select(ltb, !!!quos(vars)), 
+#             Zitems = TRUE, rel = TRUE, nomiss = .33)
+
+# Standardize list of variables
+# id <- ltb %>% select(Participant)
+# vars_std <- standardize_list_vars(ltb, quos(vars))
+
+# merge data 
+# ltb %<>% left_join(vars_std, by = "Participant") 
+```
+
+```{r}
+# ltb <- ltb %>%
+#   mutate(
+#     s2.belong_c4_z = scale(s2.belong_c4),
+#     s1.belong_c4_z = scale(s1.belong_c4),
+#     s2.belong_diff_z = s2.belong_c4_z - s1.belong_c4_z
+#   )
+
+# ltb %>%
+#   select(
+#     s2.belong_diff_z, s2.belong_c4_z, s1.belong_c4_z
+#   )
+```
+
+
+# Clean condition
+
+```{r}
+get_names(ltb, "cond")
+
+ltb %<>% 
+  mutate(
+    cond = as.factor(Condition),
+    cond = factor(
+      cond,
+      levels = c(1, 
+                 2,
+                 3),
+      labels = c("control", 
+                 "intv",
+                 "letter")
+    )
+  )
+
+ltb %>% 
+  count(Condition, cond)
+```
+
+
+
+```{r export cleaned dataset}
+ltb %>% 
+  write_csv("../../LTB Data/LTB Intervention Data/Fall '16-Spring '17 & Fall '17-Spring '18 Intervention Data (Filtered & cleaned).csv")
+
+ltb %>% 
+  write_rds("../../LTB Data/LTB Intervention Data/Fall '16-Spring '17 & Fall '17-Spring '18 Intervention Data (Filtered & cleaned).rds")
 ```
 
