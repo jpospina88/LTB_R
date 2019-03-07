@@ -58,3 +58,11 @@ ltb %>%
   arrange(Participant)
 ```
 
+```{r}
+ltb %>% 
+  write_csv("../../LTB Data/LTB Intervention Data/Fall '16-Spring '17 & Fall '17-Spring '18 Intervention Data (Filtered).csv")
+
+ltb %>% 
+  write_rds("../../LTB Data/LTB Intervention Data/Fall '16-Spring '17 & Fall '17-Spring '18 Intervention Data (Filtered).rds")
+```
+
