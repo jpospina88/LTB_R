@@ -23,7 +23,10 @@ source("../R/custom_functions.R")
 
 ```{r}
 ltb <-
-  read_rds("../../LTB Data/LTB Intervention Data/Fall '16-Spring '17 & Fall '17-Spring '18 Intervention Data (Filtered & cleaned).rds")
+  # read_rds("../../LTB Data/LTB Intervention Data/Fall '16-Spring '17 & Fall '17-Spring '18 Intervention Data (Filtered & cleaned).rds")
+  #Elizabeth
+  read_rds("C:/Users/Elizabeth Weitz/Box Sync/Lifting the Bar Materials & Data/LTB Data/LTB Intervention Data/Fall '16-Spring '17 & Fall '17-Spring '18 Intervention Data (Filtered & cleaned).rds")
+
 ```
 
 ```{r}
