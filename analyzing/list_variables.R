@@ -30,7 +30,7 @@ tribble_dv <- tribble(
   "s1.safety_c4",                            "Feeling of Safety",                                   seq(1, 4, 1),      c(1, 4),         1.5,                  "(Post-Intervention; 4 Items)",                            3,
   "s2.school_exper",                         "Experience in School",                                seq(1, 5, 1),      c(1, 5),         1.5,                  "(Follow-Up; 1 Item; Higher = Worse)",                     3,
   "s2.belong_c4",                            "Belonging at School",                                 seq(1, 6, 1),      c(1, 6),         1.5,                  "(Follow-Up; 4 Items)",                                    3,
-  's2.belong_diff',                          "Difference of Belonging at School",                   seq(-2, 2, 0.5),   c(-2, 2),        -1.5,                    "(More Negative = Higher Belonging Gap)",           3
+  's2.belong_diff',                          "Difference of Belonging at School",                   seq(-2, 2, 0.5),   c(-2, 2),        -1.5,                    "(More Negative = Higher Belonging Gap)",           2
 )  
 
 tribble_cond <- data.frame(matrix(c("cond"), nrow = nrow(tribble_dv)))
