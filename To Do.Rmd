@@ -1,0 +1,39 @@
+---
+title: "To Do"
+author: "Elizabeth Weitz"
+date: "March 18, 2019"
+output: html_document
+---
+
+# RCs
+To-Do
+  Read Shannon Spontaneous Self-Affirmation OR Coding protocol and plan adaptation for LTB ORs
+  Create Code Book for ORs: (list below)
+    
+
+Done
+
+##Juan
+###To-Do
+
+###Done
+
+##Elizabeth
+
+###To-Do
+
+###Done
+
+
+# RAs
+###To-Do
+  Binders are organized by Participant #, with several packets per participant
+    Go through binders to check that no participant packets are out of place; if any are, move them to correct location
+  
+  Use printed intervention outcome data to validate transcriptions from print to spreadsheet
+    Are there sections that are incomplete?
+    Participants that are incomplete?
+    Questions that are incorrectly coded?
+    
+  
+###Done
