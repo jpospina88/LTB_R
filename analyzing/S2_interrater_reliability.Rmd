@@ -1,0 +1,88 @@
+---
+title: "Intraclass Correlation Coefficients for Open-Ended responses"
+author: "Juan Ospina"
+date: "3/25/2019"
+output: html_document
+---
+
+Inter-rater reliability:
+http://www.cookbook-r.com/Statistical_analysis/Inter-rater_reliability/
+
+```{r packages and parameters, include=FALSE}
+# install.packages("tidyverse")
+library(irr)
+library(googlesheets)
+library(magrittr)
+library(tidyverse) # to read dataset
+
+# gs_ls()
+
+# data files
+ltb_qc <- gs_title("S2QualitativeCoding")
+
+# list worksheets
+gs_ws_ls(ltb_qc)
+
+# get data sheet
+ltb <- gs_read(ss = ltb_qc, ws = "S2QualitativeCoding") # add skip=1 as an argument if you don't want a certain row added as a data frame
+```
+
+```{r}
+# ltb
+```
+# Session 2
+
+## Please describe how your experience in school has or has not changed since our last session.
+
+```{r}
+sum(!is.na(ltb$s2.school_changed), na.rm = T)
+```
+
+First question: There are 34 responses in total.
+
+```{r}
+kappa2(ltb[,c("s2.change_E_attendance","s2.change_J_attendance")], "unweighted")
+kappa2(ltb[,c("s2.change_E_work","s2.change_J_work")], "unweighted")
+kappa2(ltb[,c("s2.change_E_focus","s2.change_J_focus")], "unweighted")
+
+# use this example for ordinal constructs (e.g. Growth)
+kappa2(ltb[,c("s2.change_E_growth","s2.change_J_growth")], "unweighted")
+kappa2(ltb[,c("s2.change_E_growth","s2.change_J_growth")], "squared")
+kappa2(ltb[,c("s2.change_E_growth","s2.change_J_growth")], "equal")
+icc(ltb[,c("s2.change_E_growth","s2.change_J_growth")], model="oneway", type="consistency")
+
+
+# use this example for ordinal constructs (e.g. Growth)
+kappa2(ltb[,c("s2.change_E_relationships","s2.change_J_relationships")], "unweighted")
+kappa2(ltb[,c("s2.change_E_relationships","s2.change_J_relationships")], "squared")
+kappa2(ltb[,c("s2.change_E_relationships","s2.change_J_relationships")], "equal")
+icc(ltb[,c("s2.change_E_relationships","s2.change_J_relationships")], model="oneway", type="consistency")
+```
+
+
+## Please describe what if anything you have done since our last session to improve your experience in school?
+
+```{r}
+sum(!is.na(ltb$s2.school_improve), na.rm = T)
+```
+
+Second question: There are 34 responses in total.
+
+```{r}
+kappa2(ltb[,c("s2.improve_E_attendance","s2.improve_J_attendance")], "unweighted")
+kappa2(ltb[,c("s2.improve_E_work","s2.improve_J_work")], "unweighted")
+kappa2(ltb[,c("s2.improve_E_focus","s2.improve_J_focus")], "unweighted")
+
+# use this example for ordinal constructs (e.g. Growth)
+kappa2(ltb[,c("s2.improve_E_growth","s2.improve_J_growth")], "unweighted")
+kappa2(ltb[,c("s2.improve_E_growth","s2.improve_J_growth")], "squared")
+kappa2(ltb[,c("s2.improve_E_growth","s2.improve_J_growth")], "equal")
+icc(ltb[,c("s2.improve_E_growth","s2.improve_J_growth")], model="oneway", type="consistency")
+
+
+# use this example for ordinal constructs (e.g. Growth)
+kappa2(ltb[,c("s2.improve_E_relationships","s2.improve_J_relationships")], "unweighted")
+kappa2(ltb[,c("s2.improve_E_relationships","s2.improve_J_relationships")], "squared")
+kappa2(ltb[,c("s2.improve_E_relationships","s2.improve_J_relationships")], "equal")
+icc(ltb[,c("s2.improve_E_relationships","s2.improve_J_relationships")], model="oneway", type="consistency")
+```
