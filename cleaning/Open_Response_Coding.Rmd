@@ -52,8 +52,7 @@ Code Session 2 to start - ask Greg on 3/24 if we should also code Session 1
 *    work: commitment, making an effort to complete HW, study more, take classes previously failed (0,1)
 *    focus: commitment, mentioning mental commitment i.e paying attention, more focus (0,1)
 *    growth: did things change, in what direction? (2: positive; 1: neutral; 0: negative)
-*    construal: are things better, the same, or worse? (2: better; 1: the same; 0: worse)
-*    relationships: did they mention them or not? (0,1)
+*    relationships: do they mention relationships? If so, are these relationships positive or negative? i.e. mention teachers, or joining groups or organizations (2: positive; 1: don't mention relationships; 0: negative)
 
 ```{r}
 # d$s2.school_changed
