@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
 Notes from Shannon's Spontaneous Self-Affirmation protocol for coding ORs
@@ -27,49 +27,133 @@ Code Session 2 to start - ask Greg on 3/24 if we should also code Session 1
 
 ## Session 1
   
-*    Control
-    +    Why are study skills important?
-    +    What kinds of study skills can students develop?
-    +    We think it will be most helpful for future students if they hear directly from you, in your own voice, instead of just seeing words on paper.
-    +    What is a study skill you would like to get better at in school, for instance one you might not use well now?
+  Control
+    Why are study skills important?
+    What kinds of study skills can students develop?
+    We think it will be most helpful for future students if they hear directly from you, in your own voice, instead of just seeing words on paper.
+    What is a study skill you would like to get better at in school, for instance one you might not use well now?
     
-*    Intervention
-    +    Students’ experience in school got better in two ways: 
-        -    One way was that students said it helped to think about what was important to them personally....What's important to you? Below are some ideas from other students. Please circle 1 to 3 things.
-        -    Pick one you circled above. Tell us why this is important to you.
-    +    What challenges do students face when coming back to school in Oakland from the Juvenile Detention system? 
-    +    How can positive relationships with teachers and other adults in school help students have a better experience in school?
-    +    How can students develop better relationships with teachers and other adults in school?
-    +    Who is an adult in school you would like to get to know better, for instance, someone you do not know well yet?
-        -    What would you like your teacher to know about who you are as a person and what is important to you? Write 1-2 things.
-        -    What would you like your teacher to know about your goals in school? Write 1-2 things. 
-        -    What would you like your teacher to know about what is difficult for you in school that you would like to improve, so they can help? Write 1-2 things.
+  Intervention
+    3: Students’ experience in school got better in two ways: 
+      a) One way was that students said it helped to think about what was important to them personally....What's important to you? Below are some ideas from other students. Please circle 1 to 3 things.
+        Pick one you circled above. Tell us why this is important to you.
+    What challenges do students face when coming back to school in Oakland from the Juvenile Detention system? 
+    How can positive relationships with teachers and other adults in school help students have a better experience in school?
+    How can students develop better relationships with teachers and other adults in school?
+    Who is an adult in school you would like to get to know better, for instance, someone you do not know well yet?
+      1. What would you like your teacher to know about who you are as a person and what is important to you? Write 1-2 things.
+      2. What would you like your teacher to know about your goals in school? Write 1-2 things. 
+      3. What would you like your teacher to know about what is difficult for you in school that you would like to improve, so they can help? Write 1-2 things.
       
 # Session 2
-
-## Please describe how your experience in school has or has not changed since our last session.
-*    attendance: Going to school/classes more (0,1)
-*    work: commitment, making an effort to complete HW, study more, take classes previously failed (0,1)
-*    focus: commitment, mentioning mental commitment i.e paying attention, more focus (0,1)
-*    growth: did things change, in what direction? (2: positive; 1: neutral; 0: negative)
-*    relationships: do they mention relationships? If so, are these relationships positive or negative? i.e. mention teachers, or joining groups or organizations (2: positive; 1: don't mention relationships; 0: negative)
 
 ```{r}
 # d$s2.school_changed
 # write.csv(d[,c(1,116,117)], "S2QualitativeCoding.csv") # participant, school_changed, and school_improve
+library(googlesheets)
+library(magrittr)
+library(tidyverse) # to read dataset
+library(psych)
+library(lme4)
+
+# gs_ls()
+
+# data files
+ltb_qc <- gs_title("S2QualitativeCoding")
+
+# list worksheets
+gs_ws_ls(ltb_qc)
+
+# get data sheet
+dcoded <- gs_read(ss = ltb_qc, ws = "S2QualitativeCoding") # add skip=1 as an argument if you don't want a certain row added as a data frame
+names(dcoded)
+dcoded <- dcoded[,c(1,3:12, 14:23)] # delete school_changed and school_improve so that they aren't duplicated after merge
+
+d <-
+  read_rds("../../LTB Data/LTB Intervention Data/Fall '16-Spring '17 & Fall '17-Spring '18 Intervention Data (Filtered & cleaned).rds")
+  #Elizabeth
+  # read_rds("C:/Users/Elizabeth Weitz/Box Sync/Lifting the Bar Materials & Data/LTB Data/LTB Intervention Data/Fall '16-Spring '17 & Fall '17-Spring '18 Intervention Data (Filtered & cleaned).rds")
+
+d <- merge(d, dcoded, by = "Participant", all = T)
+names(d)
+```
+
+
+## Please describe how your experience in school has or has not changed since our last session.
+attendance: Going to school/classes more (0,1)
+Work: commitment, making an effort to complete HW, study more, take classes previously failed (0,1)
+focus: commitment, mentioning mental commitment i.e paying attention, more focus (0,1)
+growth: did things change, in what direction? (2: positive; 1: neutral; 0: negative)
+construal: are things better, the same, or worse? (2: better; 1: the same; 0: worse)
+relationships: did they mention them or not? (0,1)
+
+```{r}
+# change_attendanceICC <- summary(ICC(d[,c(203,208)], missing = T))
+describe(d[d$cond == "control",]$s2.change_E_attendance)
+describe(d[d$cond == "intv",]$s2.change_E_attendance)
+describe(d[d$cond == "letter",]$s2.change_E_attendance)
+
+describe(d[d$cond == "control",]$s2.change_E_growth)
+describe(d[d$cond == "intv",]$s2.change_E_growth)
+describe(d[d$cond == "letter",]$s2.change_E_growth)
+
+describe(d[d$cond == "control",]$s2.change_E_relationships)
+describe(d[d$cond == "intv",]$s2.change_E_relationships)
+describe(d[d$cond == "letter",]$s2.change_E_relationships)
+
 ```
 
 ## Please describe what if anything you have done since our last session to improve your experience in school?
 
-*    attendance: Going to school/classes more (0,1)
-*    commitment_Work: making an effort to complete HW, study more, take classes previously failed (0,1)
-*    commitment_focus: mentioning mental commitment i.e paying attention, more focus (0,1)
-*    growth: did things change, in what direction? (2: positive; 1: neutral; 0: negative)
-*    count_relationships: did they mention them or not? (0,1)
+Attendance: Going to school/classes more (0,1)
+commitment_Work: making an effort to complete HW, study more, take classes previously failed (0,1)
+commitment_focus: mentioning mental commitment i.e paying attention, more focus (0,1)
+growth: did things change, in what direction? (2: positive; 1: neutral; 0: negative)
+count_relationships: did they mention them or not? (0,1)
 
 ```{r}
+d %<>% 
+  mutate(
+    cond_comb = ifelse(cond == "intv" | cond == "letter", "intv", "control"),
+    s2.improve_E_relationships_pos = ifelse(s2.improve_E_relationships == 1, 0, 1),
+    s2.change_E_growth_pos = ifelse(s2.change_E_growth == 2, 1, 0),
+    s2.change_E_growth_neg = ifelse(s2.change_E_growth == 0, 1, 0)
+  )
 
-# d$s2.school_improve
+d %>% 
+  count(cond, cond_comb)
+
+d %>% 
+  count(s2.change_E_growth, s2.change_E_growth_neg)
+
+describe(d[d$cond_comb == "control",]$s2.improve_E_attendance)
+describe(d[d$cond_comb == "intv",]$s2.improve_E_attendance)
+# describe(d[d$cond == "letter",]$s2.improve_E_attendance)
+
+describe(d[d$cond_comb == "control",]$s2.change_E_work)
+describe(d[d$cond_comb == "intv",]$s2.change_E_work)
+
+describe(d[d$cond_comb == "control",]$s2.change_E_focus)
+describe(d[d$cond_comb == "intv",]$s2.change_E_focus)
+
+describe(d[d$cond_comb == "control",]$s2.change_E_growth_pos)
+describe(d[d$cond_comb == "intv",]$s2.change_E_growth_pos)
+
+describe(d[d$cond_comb == "control",]$s2.change_E_growth_neg)
+describe(d[d$cond_comb == "intv",]$s2.change_E_growth_neg)
+
+describe(d[d$cond_comb == "control",]$s2.improve_E_relationships_pos)
+describe(d[d$cond_comb == "intv",]$s2.improve_E_relationships_pos)
+# describe(d[d$cond == "letter",]$s2.improve_E_relationships_pos)
+
+mod <- glm(s2.improve_E_attendance ~ cond_comb, data = d, family = "binomial")
+summary(mod)
+
+mod <- glm(s2.improve_E_relationships_pos ~ cond_comb, data = d, family = "binomial")
+summary(mod)
+
+
+
 ```
 
 ## 
